@@ -1,36 +1,28 @@
-
 from pyrogram import Client, filters
-from pyrogram.types import Message
-import os, json
+import os
 
-# 🧩 مقادیر از محیط Render
+# 🧩 متغیرهای محیطی از Render
 API_ID = int(os.getenv("API_ID"))
 API_HASH = os.getenv("API_HASH")
 SESSION_STRING = os.getenv("SESSION_STRING")
-SUDO_ID = int(os.getenv("SUDO_ID"))
 
-# 🧠 ساخت یوزربات
+# ✨ ساخت کلاینت Pyrogram
 app = Client(
-    name="userbot",
+    "userbot",
     api_id=API_ID,
     api_hash=API_HASH,
     session_string=SESSION_STRING
 )
 
-# 💬 پیام شروع
-@app.on_message(filters.command(["start"]) & filters.user(SUDO_ID))
-async def start(_, message: Message):
-    await message.reply_text("✅ یوزربات با موفقیت فعاله و کار می‌کنه!")
+# 🚀 وقتی استارت شد
+@app.on_message(filters.me & filters.command("ping", prefixes=["!", "/", ""]))
+async def ping(_, msg):
+    await msg.reply_text("🏓 Pong! یوزربات فعاله ✅")
 
-# 💡 چک ساده برای اطمینان از کارکرد
-@app.on_message(filters.text & filters.user(SUDO_ID))
-async def echo(_, message: Message):
-    text = message.text
-    if text == "ping":
-        await message.reply_text("🏓 pong!")
-    elif text == "id":
-        await message.reply_text(f"👤 آیدی عددی شما: <code>{message.from_user.id}</code>", parse_mode="html")
+@app.on_message(filters.me & filters.text)
+async def echo(_, msg):
+    if msg.text.lower() == "سلام":
+        await msg.reply_text("سلام رفیق 😄 من آنلاینم!")
 
-# 🚀 شروع اجرا
-print("✅ Userbot is running...")
+print("✅ Userbot started and listening for messages...")
 app.run()
